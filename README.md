@@ -1,6 +1,7 @@
 # 💬 JavaChat
 
-A secure real-time desktop chat application developed using Java.  
+A secure real-time desktop chat application developed using Java.
+
 JavaChat provides private messaging, file sharing, online/offline status, last seen, user blocking, chat history, secure authentication, and database storage.
 
 ---
@@ -34,14 +35,13 @@ JavaChat provides private messaging, file sharing, online/offline status, last s
 | Technology | Purpose |
 |---|---|
 | Java | Main programming language |
-| Swing | Desktop GUI |
-| AWT | GUI layouts and desktop components |
+| JavaFX | Graphical User Interface |
 | MySQL | Database management |
 | JDBC | Java-MySQL connectivity |
 | Maven | Build and dependency management |
-| SSL/TLS | Secure communication |
+| SSL/TLS | Secure client-server communication |
 | TCP | Reliable message communication |
-| UDP/NIO | Online status heartbeat |
+| UDP/NIO | Online/offline status heartbeat |
 | BCrypt | Password security |
 
 ---
@@ -49,37 +49,79 @@ JavaChat provides private messaging, file sharing, online/offline status, last s
 ## 🏗️ System Architecture
 
 ```text
-                ┌──────────────────┐
-                │    JavaChat GUI  │
-                │   Swing + AWT    │
-                └────────┬─────────┘
-                         │
-                         ▼
-                ┌──────────────────┐
-                │    ChatClient    │
-                └────────┬─────────┘
-                         │
-                    SSL/TLS + TCP
-                         │
-                         ▼
-                ┌──────────────────┐
-                │    ChatServer    │
-                └────────┬─────────┘
-                         │
-                  ┌──────┴──────┐
-                  ▼             ▼
-          ┌─────────────┐ ┌─────────────┐
-          │ClientHandler│ │ UDP / NIO   │
-          │             │ │ Heartbeat   │
-          └──────┬──────┘ └─────────────┘
-                 │
-                 ▼
-          ┌─────────────┐
-          │  MySQL DB   │
-          └─────────────┘
+                 ┌────────────────────┐
+                 │    JavaChat GUI    │
+                 │      JavaFX        │
+                 └─────────┬──────────┘
+                           │
+                           ▼
+                 ┌────────────────────┐
+                 │     ChatClient     │
+                 └─────────┬──────────┘
+                           │
+                      SSL/TLS + TCP
+                           │
+                           ▼
+                 ┌────────────────────┐
+                 │     ChatServer     │
+                 └─────────┬──────────┘
+                           │
+                    ┌──────┴──────┐
+                    ▼             ▼
+             ┌─────────────┐ ┌─────────────┐
+             │ClientHandler│ │ UDP / NIO   │
+             │             │ │  Heartbeat  │
+             └──────┬──────┘ └─────────────┘
+                    │
+                    ▼
+             ┌─────────────┐
+             │   MySQL DB  │
+             └─────────────┘
 
-Project Structure:
+🔄 Communication Flow
+1. Login
 
+User
+  ↓
+Login Window
+  ↓
+UserDAO
+  ↓
+MySQL Database
+  ↓
+Login Success
+  ↓
+Chat Window
+
+
+2. Message Communication
+Sender
+  ↓
+ChatClient
+  ↓
+SSL/TLS + TCP
+  ↓
+ChatServer
+  ↓
+ClientHandler
+  ↓
+Receiver
+
+3. Online Status
+ChatClient
+  ↓
+UDP/NIO Heartbeat
+  ↓
+ChatServer
+  ↓
+Heartbeat Timestamp
+  ↓
+Online / Offline Status
+  ↓
+Last Seen
+
+
+📂 Project Structure:
 JavaChatApp/
 │
 ├── src/
@@ -87,6 +129,7 @@ JavaChatApp/
 │       ├── java/
 │       │   └── com/
 │       │       └── javachat/
+│       │           │
 │       │           ├── client/
 │       │           │   └── ChatClient.java
 │       │           │
@@ -114,6 +157,18 @@ JavaChatApp/
 ├── pom.xml
 └── README.md
 
+
 🎯 Project Objective
 
 The main objective of JavaChat is to develop a secure and reliable real-time desktop messaging application using Java networking, database connectivity, secure communication, and graphical user interface technologies.
+
+The project demonstrates the practical implementation of:
+
+Client-server architecture
+Secure networking
+Real-time communication
+Database connectivity
+Authentication
+Online status monitoring
+File sharing
+User management
